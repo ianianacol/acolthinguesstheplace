@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>History</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* BOX */
+.container {
+    background: rgba(0,0,0,0.5);
+    padding: 20px;
+    border-radius: 15px;
+    width: 320px;
+}
+
+/* TITLE */
+h2 {
+    text-align: center;
+}
+
+/* LIST */
+.history-list {
+    margin-top: 15px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* ITEM */
+.item {
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+}
+
+/* BUTTON */
+button {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>📜 Game History</h2>
+
+    <p>💰 Coins: <span id="coins"></span></p>
+    <p>⭐ Level: <span id="level"></span></p>
+
+    <div class="history-list" id="historyList"></div>
+
+    <button onclick="clearHistory()">🗑 Clear History</button>
+    <button onclick="goBack()">⬅ Back</button>
+
+</div>
+
+<script>
+
+// LOAD DATA
+let coins = localStorage.getItem("coins") || 0;
+let level = localStorage.getItem("level") || 1;
+let history = JSON.parse(localStorage.getItem("history")) || [];
+
+document.getElementById("coins").innerText = coins;
+document.getElementById("level").innerText = level;
+
+// DISPLAY HISTORY
+let list = document.getElementById("historyList");
+
+if(history.length === 0){
+    list.innerHTML = "<p>No history yet</p>";
+} else {
+    history.forEach(item => {
+        list.innerHTML += `
+            <div class="item">
+                ${item}
+            </div>
+        `;
+    });
+}
+
+// CLEAR
+function clearHistory(){
+    localStorage.removeItem("history");
+    location.reload();
+}
+
+// BACK
+function goBack(){
+    window.location.href = "index.html";
+}
+
+</script>
+
+</body>
+</html>

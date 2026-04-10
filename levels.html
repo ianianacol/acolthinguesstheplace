@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Select Level</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+}
+
+/* DARK MODE */
+body.dark {
+    background: #111;
+}
+
+/* BACKGROUND */
+.background {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url('images/lapuyan.jpg.png') no-repeat center/cover;
+    z-index: -2;
+}
+
+/* OVERLAY */
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: -1;
+}
+
+/* DARK OVERLAY ADJUST */
+body.dark .overlay {
+    background: rgba(0,0,0,0.8);
+}
+
+/* CONTAINER */
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+
+    padding: 30px;
+    border-radius: 20px;
+
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+}
+
+/* TITLE */
+.title {
+    font-family: 'Bangers', cursive;
+    font-size: 45px;
+    letter-spacing: 2px;
+    text-shadow: 
+        3px 3px 0 #ff6a00,
+        6px 6px 0 #000;
+    margin-bottom: 25px;
+}
+
+/* GRID */
+.level-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* BUTTON */
+.level-btn {
+    padding: 20px;
+    border-radius: 15px;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    transition: 0.25s;
+}
+
+/* COLORS */
+.easy { background: linear-gradient(45deg,#2ecc71,#27ae60); }
+.medium { background: linear-gradient(45deg,#f39c12,#e67e22); }
+.hard { 
+    background: linear-gradient(45deg,#e74c3c,#c0392b);
+    grid-column: span 2;
+}
+
+/* HOVER */
+.level-btn:hover { transform: scale(1.05); }
+.level-btn:active { transform: scale(0.95); }
+
+/* BACK BUTTON */
+.back-btn {
+    margin-top: 20px;
+    padding: 12px;
+    width: 100%;
+    border-radius: 12px;
+    border: none;
+    background: #444;
+    color: white;
+    cursor: pointer;
+}
+
+/* DARK/LIGHT BUTTON 🔥 */
+.mode-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    cursor: pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="background"></div>
+<div class="overlay"></div>
+
+<!-- 🌙 MODE BUTTON -->
+<button class="mode-btn" onclick="toggleMode()" id="modeBtn">🌙</button>
+
+<div class="container">
+
+    <div class="title">SELECT LEVEL</div>
+
+    <div class="level-grid">
+
+        <button class="level-btn easy" onclick="selectLevel(1)">
+            🟢 EASY
+            <small>20 seconds</small>
+        </button>
+
+        <button class="level-btn medium" onclick="selectLevel(2)">
+            🟠 MEDIUM
+            <small>15 seconds</small>
+        </button>
+
+        <button class="level-btn hard" onclick="selectLevel(3)">
+            🔴 HARD
+            <small>10 seconds</small>
+        </button>
+
+    </div>
+
+    <button class="back-btn" onclick="goHome()">🏠 Back</button>
+
+</div>
+
+<script>
+
+// SELECT LEVEL
+function selectLevel(level){
+    localStorage.setItem("levelMode", level);
+    window.location.href = "game.html";
+}
+
+// BACK
+function goHome(){
+    window.location.href = "index.html";
+}
+
+// 🌙 DARK MODE SYSTEM
+let isDark = localStorage.getItem("darkMode") === "true";
+let modeBtn = document.getElementById("modeBtn");
+
+// APPLY
+function applyMode(){
+    document.body.classList.toggle("dark", isDark);
+    modeBtn.innerText = isDark ? "☀️" : "🌙";
+}
+
+// TOGGLE
+function toggleMode(){
+    isDark = !isDark;
+    localStorage.setItem("darkMode", isDark);
+    applyMode();
+}
+
+// LOAD
+applyMode();
+
+</script>
+
+</body>
+</html>

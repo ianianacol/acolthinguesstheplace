@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guess The Place</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: 0.3s;
+}
+
+/* 🌞 LIGHT MODE */
+body.light {
+    background: #ffffff;
+    color: #333;
+}
+
+/* 🌙 DARK MODE */
+body.dark {
+    background: #1e1e2f;
+    color: #ffffff;
+}
+
+/* CONTAINER */
+.game-container {
+    width: 95%;
+    max-width: 420px;
+    height: 95vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding: 12px;
+    border-radius: 20px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+/* LIGHT */
+body.light .game-container {
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* DARK */
+body.dark .game-container {
+    background: #2c2c3a;
+}
+
+/* BUTTONS */
+.exit-btn, .mute-btn, .mode-btn {
+    position: absolute;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+/* LIGHT BUTTON */
+body.light .exit-btn,
+body.light .mute-btn,
+body.light .mode-btn {
+    background: #eee;
+    color: #333;
+}
+
+/* DARK BUTTON */
+body.dark .exit-btn,
+body.dark .mute-btn,
+body.dark .mode-btn {
+    background: #444;
+    color: #fff;
+}
+
+.exit-btn { top: 15px; left: 15px; }
+.mute-btn { top: 15px; right: 15px; }
+.mode-btn { top: 60px; right: 15px; }
+
+/* TOP BAR */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+}
+
+/* TITLE */
+h1 {
+    margin: 5px 0;
+    font-size: 18px;
+}
+
+/* QUESTION */
+.question {
+    font-size: 14px;
+    margin: 2px 0;
+}
+
+/* TIMER */
+.timer {
+    font-size: 13px;
+}
+
+/* IMAGE */
+.image-box {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 6px 0;
+    padding: 3px;
+    border-radius: 12px;
+}
+
+/* LIGHT IMAGE */
+body.light .image-box {
+    background: #f2f2f2;
+}
+
+/* DARK IMAGE */
+body.dark .image-box {
+    background: #444;
+}
+
+.image-box img {
+    width: 200%;
+    max-height: 230px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* OPTIONS */
+#options {
+    overflow-y: auto;
+}
+
+/* LIGHT BUTTON */
+body.light #options button {
+    background: #3498db;
+    color: white;
+}
+
+/* DARK BUTTON */
+body.dark #options button {
+    background: #2980b9;
+    color: white;
+}
+
+#options button {
+    width: 100%;
+    padding: 9px;
+    margin: 3px 0;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* RESULT */
+#result {
+    font-size: 13px;
+    min-height: 20px;
+}
+
+</style>
+</head>
+
+<body class="light"> <!-- ✅ DEFAULT MODE -->
+
+<button class="exit-btn" onclick="goBack()">⬅ Exit</button>
+<button class="mute-btn" onclick="toggleMute()" id="muteBtn">🔊</button>
+<button class="mode-btn" onclick="toggleTheme()" id="modeBtn">🌙</button>
+
+<div class="game-container">
+
+    <div class="top-bar">
+        <span>💰 <span id="coins">1000</span></span>
+        <span>⭐ <span id="level">1</span></span>
+        <span>🏆 <span id="score">10</span></span>
+    </div>
+
+    <h1>🌍 Guess The Place</h1>
+
+    <div class="question">📍 Saan ito?</div>
+
+    <div class="timer">
+        ⏱ Time: <span id="timer">0</span>
+    </div>
+
+    <div class="image-box">
+        <img id="gameImage" src="">
+    </div>
+
+    <div id="options"></div>
+
+    <p id="result"></p>
+
+</div>
+
+<!-- AUDIO -->
+<audio id="correctSound" src="sounds/correct.mp3"></audio>
+<audio id="wrongSound" src="sounds/wrong.mp3"></audio>
+<audio id="bgMusic" src="sounds/bg.mp3" loop></audio>
+
+<script src="script.js"></script>
+
+<script>
+
+// BACK
+function goBack(){
+    window.location.href = "levels.html";
+}
+
+// MUSIC
+let bgMusic = document.getElementById("bgMusic");
+let muteBtn = document.getElementById("muteBtn");
+
+let isMuted = localStorage.getItem("muted") === "true";
+
+function applyMute(){
+    bgMusic.muted = isMuted;
+    muteBtn.innerText = isMuted ? "🔇" : "🔊";
+}
+
+function toggleMute(){
+    isMuted = !isMuted;
+    localStorage.setItem("muted", isMuted);
+    applyMute();
+}
+
+bgMusic.volume = localStorage.getItem("volume") || 0.5;
+
+document.body.addEventListener("click", () => {
+    bgMusic.play();
+}, { once: true });
+
+applyMute();
+
+// 🌙 DARK / LIGHT MODE (FIXED)
+let modeBtn = document.getElementById("modeBtn");
+
+// LOAD SAVED
+let savedTheme = localStorage.getItem("theme") || "light";
+document.body.classList.add(savedTheme);
+updateIcon();
+
+function toggleTheme(){
+    if(document.body.classList.contains("light")){
+        document.body.classList.remove("light");
+        document.body.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+    } else {
+        document.body.classList.remove("dark");
+        document.body.classList.add("light");
+        localStorage.setItem("theme", "light");
+    }
+    updateIcon();
+}
+
+function updateIcon(){
+    if(document.body.classList.contains("dark")){
+        modeBtn.innerText = "☀️";
+    } else {
+        modeBtn.innerText = "🌙";
+    }
+}
+
+</script>
+
+</body>
+</html>

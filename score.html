@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scores</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: rgba(0,0,0,0.5);
+    padding: 20px;
+    border-radius: 15px;
+    width: 320px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.box {
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+}
+
+button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>🏆 Scores</h2>
+
+    <div class="box">
+        <h3>🌟 Easy</h3>
+        <p>Highest: <span id="high1"></span></p>
+        <p>Lowest: <span id="low1"></span></p>
+    </div>
+
+    <div class="box">
+        <h3>🔥 Medium</h3>
+        <p>Highest: <span id="high2"></span></p>
+        <p>Lowest: <span id="low2"></span></p>
+    </div>
+
+    <div class="box">
+        <h3>💀 Hard</h3>
+        <p>Highest: <span id="high3"></span></p>
+        <p>Lowest: <span id="low3"></span></p>
+    </div>
+
+    <button onclick="goBack()">⬅ Back</button>
+
+</div>
+
+<script>
+
+// LOAD SCORES
+for(let i=1; i<=3; i++){
+    document.getElementById("high"+i).innerText =
+        localStorage.getItem("highscore_"+i) || 0;
+
+    document.getElementById("low"+i).innerText =
+        localStorage.getItem("lowscore_"+i) || 0;
+}
+
+// BACK
+function goBack(){
+    window.location.href = "index.html";
+}
+
+</script>
+
+</body>
+</html>

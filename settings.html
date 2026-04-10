@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* BOX */
+.container {
+    background: rgba(0,0,0,0.5);
+    padding: 25px;
+    border-radius: 20px;
+    width: 300px;
+    text-align: center;
+}
+
+/* SLIDER */
+input {
+    width: 100%;
+}
+
+/* BUTTON */
+button {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>⚙ Settings</h2>
+
+    <label>🔊 Music Volume</label>
+    <input type="range" id="volumeSlider" min="0" max="1" step="0.01">
+
+    <h3>📜 Instructions</h3>
+    <p>
+    Guess the place based on the image.<br>
+    Answer before time runs out ⏱️<br>
+    Earn coins if correct!
+    </p>
+
+    <button onclick="goBack()">⬅ Back</button>
+
+</div>
+
+<audio id="bgMusic" loop autoplay>
+    <source src="sounds/bg.mp3">
+</audio>
+
+<script>
+
+// BACK
+function goBack(){
+    window.location.href = "index.html";
+}
+
+// MUSIC
+let music = document.getElementById("bgMusic");
+let slider = document.getElementById("volumeSlider");
+
+// LOAD
+let savedVolume = localStorage.getItem("volume");
+
+if(savedVolume !== null){
+    music.volume = savedVolume;
+    slider.value = savedVolume;
+} else {
+    music.volume = 0.5;
+    slider.value = 0.5;
+}
+
+// CHANGE
+slider.addEventListener("input", function(){
+    music.volume = this.value;
+    localStorage.setItem("volume", this.value);
+});
+
+</script>
+
+</body>
+</html>
